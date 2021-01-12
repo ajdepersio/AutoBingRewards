@@ -15,10 +15,10 @@ namespace AutoBingRewards
         {
             SetupDriver();
             Console.WriteLine("Please sign into Bing Rewards account and press any key to contine...");
-            Console.ReadKey();
+            Console.Read();
             DailySearches();
-            DailyRewardSet();
-            AdditionalOffers();
+            //DailyRewardSet();
+            //AdditionalOffers();
         }
 
         private static void SetupDriver()
@@ -51,7 +51,7 @@ namespace AutoBingRewards
             {
                 dailyRewardsLinks[i].Click();
                 Console.WriteLine("Once offer is complete, press any key to contine...");
-                Console.ReadKey();
+                Console.Read();
             }
         }
         private static void AdditionalOffers()
