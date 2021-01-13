@@ -35,7 +35,7 @@ namespace AutoBingRewards
         {
             //Level 2 search allows for 150 points per day on desktop searches.  5 points per search
             //TODO: Stop automatically once we've completed all available search rewards
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 40; i++)
             {
                 _webDriver.Navigate().GoToUrl($"https://www.bing.com/search?q={i}");
             }
