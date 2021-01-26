@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using AutoBingRewards.Steps;
 using Microsoft.Edge.SeleniumTools;
 using OpenQA.Selenium;
 using WebDriverManager;
@@ -9,13 +10,14 @@ namespace AutoBingRewards
 {
     class Program
     {
-        private static  IWebDriver _webDriver;
+        private static IWebDriver _webDriver;
 
         static void Main(string[] args)
         {
             SetupDriver();
-            Console.WriteLine("Please sign into Bing Rewards account and press any key to contine...");
-            Console.Read();
+            //Console.WriteLine("Please sign into Bing Rewards account and press any key to contine...");
+            //Console.Read();
+            Login.PerformLogin(_webDriver, args[0], "");
             DailySearches();
             //DailyRewardSet();
             //AdditionalOffers();
@@ -37,7 +39,7 @@ namespace AutoBingRewards
             //TODO: Stop automatically once we've completed all available search rewards
             for (int i = 0; i < 40; i++)
             {
-                _webDriver.Navigate().GoToUrl($"https://www.bing.com/search?q={i}");
+                Search.PerformSearch(_webDriver, i.ToString());
             }
         }
         private static void DailyRewardSet()
