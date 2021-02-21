@@ -17,7 +17,7 @@ namespace AutoBingRewards
             SetupDriver();
             //Console.WriteLine("Please sign into Bing Rewards account and press any key to contine...");
             //Console.Read();
-            Login.PerformLogin(_webDriver, args[0], "");
+            Login.PerformLogin(_webDriver, args[0] ?? "",args[1] ?? "");
             DailySearches();
             //DailyRewardSet();
             //AdditionalOffers();
@@ -37,7 +37,7 @@ namespace AutoBingRewards
         {
             //Level 2 search allows for 150 points per day on desktop searches.  5 points per search
             //TODO: Stop automatically once we've completed all available search rewards
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Search.PerformSearch(_webDriver, i.ToString());
             }

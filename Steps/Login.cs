@@ -20,7 +20,7 @@ namespace AutoBingRewards.Steps
             //#idSIButton9 -- username next button
             driver.FindElement(By.Id("idSIButton9")).Click();
 
-            Thread.Sleep(500);  //Adjust as needed
+            Thread.Sleep(2000);  //Adjust as needed
             //No Password provided
             if (string.IsNullOrWhiteSpace(password))
             {
@@ -35,6 +35,9 @@ namespace AutoBingRewards.Steps
             }
             //#idSIButton9 -- password next button
             driver.FindElement(By.Id("idSIButton9")).Click();
+            Thread.Sleep(2000);
+            driver.Navigate().GoToUrl("https://bing.com");
+            Thread.Sleep(2000);
         }
     }
 }
