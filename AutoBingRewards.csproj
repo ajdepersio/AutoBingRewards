@@ -8,11 +8,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Edge.SeleniumTools" Version="3.141.2" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageReference Include="NuGet.CommandLine" Version="5.8.0">
+    <PackageReference Include="NuGet.CommandLine" Version="5.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="WebDriverManager" Version="2.11.0" />
+    <PackageReference Include="WebDriverManager" Version="2.11.1" />
   </ItemGroup>
 
 </Project>
