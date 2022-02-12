@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using AutoBingRewards.PageData;
+using AutoBingRewards.PageModels;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +15,17 @@ namespace AutoBingRewards.Steps
     {
         public static void PerformLogin(IWebDriver driver, string username, string password = "")
         {
+            var loginPage = LoginPageModel.NavigateTo(driver);
+            loginPage.EnterUsername(username);
+            loginPage.EnterPassword(password);
+
+
             var url = "https://login.live.com/login.srf";
             driver.Navigate().GoToUrl(url);
             //#i0116 -- username
-            driver.FindElement(By.Id("i0116")).SendKeys(username);
+            driver.FindElement(LoginPageData.UsernameTextBox).SendKeys(username);
             //#idSIButton9 -- username next button
-            driver.FindElement(By.Id("idSIButton9")).Click();
+            driver.FindElement(LoginPageData.UsernameNextButton).Click();
 
             Thread.Sleep(2000);  //Adjust as needed
             //No Password provided
@@ -31,10 +38,10 @@ namespace AutoBingRewards.Steps
             else
             {
                 //#i0118 -- password
-                driver.FindElement(By.Id("i0118")).SendKeys(password);
+                driver.FindElement(LoginPageData.PasswordTextBox).SendKeys(password);
             }
             //#idSIButton9 -- password next button
-            driver.FindElement(By.Id("idSIButton9")).Click();
+            driver.FindElement(LoginPageData.PasswordNextButton).Click();
             Thread.Sleep(2000);
             driver.Navigate().GoToUrl("https://bing.com");
             Thread.Sleep(2000);
