@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoBingRewards.PageModels;
-using AutoBingRewards.Steps;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Playwright;
 
 namespace AutoBingRewards
@@ -13,11 +14,24 @@ namespace AutoBingRewards
 
         static async Task Main(string[] args)
         {
-            var username = args[0];
-            var password = args[1];
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddUserSecrets<Program>()
+                .Build();
 
-            await MobileSearches(username, password).ConfigureAwait(false);
-            await DesktopSearches(username, password).ConfigureAwait(false);
+            var settings = new ApplicationSettings();
+            configuration.Bind(settings);
+
+            using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
+            for (int i = 0; i < settings.Usernames.Count(); i++)
+            {
+                var username = settings.Usernames[i];
+                var password = settings.Passwords[i];
+
+                await MobileSearches(playwright, username, password).ConfigureAwait(false);
+                await DesktopSearches(playwright, username, password).ConfigureAwait(false);
+            }
 
             //var page = await _browser.NewPageAsync();
             //await page.GotoAsync("https://playwright.dev/dotnet");
@@ -32,9 +46,8 @@ namespace AutoBingRewards
             //AdditionalOffers();
         }
 
-        private static async Task DesktopSearches(string username, string password)
+        private static async Task DesktopSearches(IPlaywright playwright, string username, string password)
         {
-            using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
             var chromium = playwright.Chromium;
             var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
@@ -50,15 +63,17 @@ namespace AutoBingRewards
             await loginPage.EnterPassword(password).ConfigureAwait(false);
 
             var random = new Random();
-            Parallel.For(0, 100, async (_, __) =>
+            Parallel.For(0, 30, (_, __) =>
+            //for(int i = 0; i < 30; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
-            });
+            }
+            );
+            context.CloseAsync().Wait();
         }
 
-        private static async Task MobileSearches(string username, string password)
+        private static async Task MobileSearches(IPlaywright playwright, string username, string password)
         {
-            using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
             var chromium = playwright.Chromium;
             var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
@@ -74,10 +89,13 @@ namespace AutoBingRewards
             await loginPage.EnterPassword(password).ConfigureAwait(false);
 
             var random = new Random();
-            Parallel.For(0, 100, async (_, __) =>
+            Parallel.For(0, 20, (_, __) =>
+            //for (int i = 0; i < 20; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
-            });
+            }
+            );
+            context.CloseAsync().Wait();
         }
 
         static void DailySearches()
