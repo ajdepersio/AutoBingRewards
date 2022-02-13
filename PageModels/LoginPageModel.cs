@@ -1,5 +1,4 @@
-﻿using AutoBingRewards.PageData;
-using OpenQA.Selenium;
+﻿using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,30 +10,38 @@ namespace AutoBingRewards.PageModels
     public class LoginPageModel
     {
         private const string _pageUrl = "https://login.live.com/login.srf";
-        public IWebDriver Driver { get; }
 
-        public LoginPageModel(IWebDriver driver)
+        private const string _usernameTextBoxSelector = "#i0116";
+        private const string _usernameNextButtonSelector = "#idSIButton9";
+        private const string _passwordTextBoxSelector = "#i0118";
+        private const string _passwordNextButtonSelector = "#idSIButton9";
+
+        private IPage _page;
+
+        private LoginPageModel(IPage page)
         {
-            this.Driver = driver;
+            _page = page;
         }
 
-        public static LoginPageModel NavigateTo(IWebDriver driver)
+        public static async Task<LoginPageModel> NavigateToAsync(IBrowserContext context)
         {
-            driver.Navigate().GoToUrl(_pageUrl);
+            //var context = await browser.NewContextAsync().ConfigureAwait(false);
+            var page = await context.NewPageAsync().ConfigureAwait(false);
+            await page.GotoAsync(_pageUrl).ConfigureAwait(false);
 
-            return new LoginPageModel(driver);
+            return new LoginPageModel(page);
         }
 
-        public void EnterUsername(string username)
+        public async Task EnterUsername(string username)
         {
-            this.Driver.FindElement(LoginPageData.UsernameTextBox).SendKeys(username);
-            this.Driver.FindElement(LoginPageData.UsernameNextButton).Click();
+            await _page.FillAsync(_usernameTextBoxSelector, username).ConfigureAwait(false);
+            await _page.ClickAsync(_usernameNextButtonSelector).ConfigureAwait(false);
         }
 
-        public void EnterPassword(string password)
+        public async Task EnterPassword(string password)
         {
-            this.Driver.FindElement(LoginPageData.PasswordTextBox).SendKeys(password);
-            this.Driver.FindElement(LoginPageData.PasswordNextButton).Click();
+            await _page.FillAsync(_passwordTextBoxSelector, password);
+            await _page.ClickAsync(_passwordNextButtonSelector);
         }
     }
 }
