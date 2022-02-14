@@ -64,7 +64,7 @@ namespace AutoBingRewards
 
             var random = new Random();
             Parallel.For(0, 30, (_, __) =>
-            //for(int i = 0; i < 30; i++)
+            //for(int i = 0; i < 60; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
             }
@@ -90,7 +90,7 @@ namespace AutoBingRewards
 
             var random = new Random();
             Parallel.For(0, 20, (_, __) =>
-            //for (int i = 0; i < 20; i++)
+            //for (int i = 0; i < 40; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
             }
