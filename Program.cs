@@ -10,8 +10,6 @@ namespace AutoBingRewards
 {
     class Program
     {
-        //private static IBrowser _browser;
-
         static async Task Main(string[] args)
         {
             var configuration = new ConfigurationBuilder()
@@ -25,28 +23,16 @@ namespace AutoBingRewards
 
             using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
             {
-                Parallel.For(0, settings.Usernames.Length, (i) =>
-                //for (int i = 0; i < settings.Usernames.Length; i++)
+                //Parallel.For(0, settings.Usernames.Length, (i) =>
+                for (int i = 0; i < settings.Usernames.Length; i++)
                 {
                     var username = settings.Usernames[i];
                     var password = settings.Passwords[i];
 
-                    //MobileSearches(playwright, username, password).Wait();
+                    MobileSearches(playwright, username, password).Wait();
                     DesktopSearches(playwright, username, password).Wait();
                 }
-                );
-
-                //var page = await _browser.NewPageAsync();
-                //await page.GotoAsync("https://playwright.dev/dotnet");
-                //await page.ScreenshotAsync(new PageScreenshotOptions { Path = "screenshot.png" });
-
-                //SetupDriver();
-                ////Console.WriteLine("Please sign into Bing Rewards account and press any key to contine...");
-                ////Console.Read();
-                //Login.PerformLogin(_webDriver, args[0] ?? "",args[1] ?? "");
-                //DailySearches();
-                //DailyRewardSet();
-                //AdditionalOffers();
+                //);
 
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
@@ -111,15 +97,6 @@ namespace AutoBingRewards
             context.CloseAsync().Wait();
         }
 
-        static void DailySearches()
-        {
-            ////Level 2 search allows for 150 points per day on desktop searches.  5 points per search
-            ////TODO: Stop automatically once we've completed all available search rewards
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    Search.PerformSearch(_webDriver, i.ToString());
-            //}
-        }
         private static void DailyRewardSet()
         {
             //_webDriver.Navigate().GoToUrl("https://account.microsoft.com/rewards");
