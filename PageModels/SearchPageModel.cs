@@ -10,13 +10,13 @@ namespace AutoBingRewards.PageModels
     public class SearchPageModel
     {
         private const string _baseUrl = "https://www.bing.com/search?q=";
-
-        private IPage _page;
+        public IPage Page { get; set; }
 
         private SearchPageModel(IPage page)
         {
-            _page = page;
+            Page = page;
         }
+
 
         public static async Task<SearchPageModel> NavigateToAsync(IBrowserContext context, string searchText)
         {

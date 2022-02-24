@@ -24,26 +24,33 @@ namespace AutoBingRewards
             configuration.Bind(settings);
 
             using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
-            for (int i = 0; i < settings.Usernames.Count(); i++)
             {
-                var username = settings.Usernames[i];
-                var password = settings.Passwords[i];
+                Parallel.For(0, settings.Usernames.Length, (i) =>
+                //for (int i = 0; i < settings.Usernames.Length; i++)
+                {
+                    var username = settings.Usernames[i];
+                    var password = settings.Passwords[i];
 
-                await MobileSearches(playwright, username, password).ConfigureAwait(false);
-                await DesktopSearches(playwright, username, password).ConfigureAwait(false);
+                    //MobileSearches(playwright, username, password).Wait();
+                    DesktopSearches(playwright, username, password).Wait();
+                }
+                );
+
+                //var page = await _browser.NewPageAsync();
+                //await page.GotoAsync("https://playwright.dev/dotnet");
+                //await page.ScreenshotAsync(new PageScreenshotOptions { Path = "screenshot.png" });
+
+                //SetupDriver();
+                ////Console.WriteLine("Please sign into Bing Rewards account and press any key to contine...");
+                ////Console.Read();
+                //Login.PerformLogin(_webDriver, args[0] ?? "",args[1] ?? "");
+                //DailySearches();
+                //DailyRewardSet();
+                //AdditionalOffers();
+
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
             }
-
-            //var page = await _browser.NewPageAsync();
-            //await page.GotoAsync("https://playwright.dev/dotnet");
-            //await page.ScreenshotAsync(new PageScreenshotOptions { Path = "screenshot.png" });
-
-            //SetupDriver();
-            ////Console.WriteLine("Please sign into Bing Rewards account and press any key to contine...");
-            ////Console.Read();
-            //Login.PerformLogin(_webDriver, args[0] ?? "",args[1] ?? "");
-            //DailySearches();
-            //DailyRewardSet();
-            //AdditionalOffers();
         }
 
         private static async Task DesktopSearches(IPlaywright playwright, string username, string password)
@@ -63,13 +70,18 @@ namespace AutoBingRewards
             await loginPage.EnterPassword(password).ConfigureAwait(false);
 
             var random = new Random();
-            Parallel.For(0, 30, (_, __) =>
-            //for(int i = 0; i < 60; i++)
+            //Parallel.For(0, 30, (_, __) =>
+            for(int i = 0; i < 60; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
+                //searchPage.Page.CloseAsync();
             }
-            );
-            context.CloseAsync().Wait();
+            //);
+            for (int i = 1; i < context.Pages.Count; i++)
+            {
+                context.Pages[i].CloseAsync().Wait();
+            }
+            //context.CloseAsync().Wait();
         }
 
         private static async Task MobileSearches(IPlaywright playwright, string username, string password)
@@ -89,12 +101,13 @@ namespace AutoBingRewards
             await loginPage.EnterPassword(password).ConfigureAwait(false);
 
             var random = new Random();
-            Parallel.For(0, 20, (_, __) =>
-            //for (int i = 0; i < 40; i++)
+            //Parallel.For(0, 20, (_, __) =>
+            for (int i = 0; i < 40; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
+                //searchPage.Page.CloseAsync();
             }
-            );
+            //);
             context.CloseAsync().Wait();
         }
 

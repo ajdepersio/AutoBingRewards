@@ -9,7 +9,7 @@ namespace AutoBingRewards.PageModels
 {
     public class LoginPageModel
     {
-        private const string _pageUrl = "https://login.live.com/login.srf";
+        private const string _baseUrl = "https://login.live.com/login.srf";
 
         private const string _usernameTextBoxSelector = "#i0116";
         private const string _usernameNextButtonSelector = "#idSIButton9";
@@ -25,9 +25,8 @@ namespace AutoBingRewards.PageModels
 
         public static async Task<LoginPageModel> NavigateToAsync(IBrowserContext context)
         {
-            //var context = await browser.NewContextAsync().ConfigureAwait(false);
             var page = await context.NewPageAsync().ConfigureAwait(false);
-            await page.GotoAsync(_pageUrl).ConfigureAwait(false);
+            await page.GotoAsync(_baseUrl).ConfigureAwait(false);
 
             return new LoginPageModel(page);
         }
@@ -40,8 +39,8 @@ namespace AutoBingRewards.PageModels
 
         public async Task EnterPassword(string password)
         {
-            await _page.FillAsync(_passwordTextBoxSelector, password);
-            await _page.ClickAsync(_passwordNextButtonSelector);
+            await _page.FillAsync(_passwordTextBoxSelector, password).ConfigureAwait(false);
+            await _page.ClickAsync(_passwordNextButtonSelector).ConfigureAwait(false);
         }
     }
 }
