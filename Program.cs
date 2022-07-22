@@ -29,8 +29,8 @@ namespace AutoBingRewards
                     var username = settings.Usernames[i];
                     var password = settings.Passwords[i];
 
-                    MobileSearches(playwright, username, password).Wait();
-                    DesktopSearches(playwright, username, password).Wait();
+                    MobileSearches(playwright, username, password, settings.Headless).Wait();
+                    DesktopSearches(playwright, username, password, settings.Headless).Wait();
                 }
                 //);
 
@@ -39,13 +39,13 @@ namespace AutoBingRewards
             }
         }
 
-        private static async Task DesktopSearches(IPlaywright playwright, string username, string password)
+        private static async Task DesktopSearches(IPlaywright playwright, string username, string password, bool headless)
         {
             var chromium = playwright.Chromium;
             var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Channel = "msedge",
-                Headless = false
+                Headless = headless
             }).ConfigureAwait(false);
 
             var context = await browser.NewContextAsync().ConfigureAwait(false);
@@ -63,19 +63,19 @@ namespace AutoBingRewards
                 //searchPage.Page.CloseAsync();
             }
             //);
-            for (int i = 1; i < context.Pages.Count; i++)
-            {
-                context.Pages[i].CloseAsync().Wait();
-            }
-            //context.CloseAsync().Wait();
+            //for (int i = 1; i < context.Pages.Count; i++)
+            //{
+            //    context.Pages[i].CloseAsync().Wait();
+            //}
+            context.CloseAsync().Wait();
         }
 
-        private static async Task MobileSearches(IPlaywright playwright, string username, string password)
+        private static async Task MobileSearches(IPlaywright playwright, string username, string password, bool headless)
         {
             var chromium = playwright.Chromium;
             var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = false
+                Headless = headless
             }).ConfigureAwait(false);
 
             var options = new BrowserNewContextOptions(playwright.Devices["iPhone 13 Pro"]);

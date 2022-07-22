@@ -8,6 +8,7 @@ namespace AutoBingRewards
 {
     internal class ApplicationSettings
     {
+        public bool Headless { get; set; }
         public string[] Usernames { get; set; }
         public string[] Passwords { get; set; }
     }
