@@ -23,19 +23,24 @@ namespace AutoBingRewards
 
             using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
             {
+                Console.WriteLine($"Started at: {DateTime.Now.ToString()}");
                 //Parallel.For(0, settings.Usernames.Length, (i) =>
                 for (int i = 0; i < settings.Usernames.Length; i++)
                 {
                     var username = settings.Usernames[i];
                     var password = settings.Passwords[i];
 
-                    MobileSearches(playwright, username, password, settings.Headless).Wait();
-                    DesktopSearches(playwright, username, password, settings.Headless).Wait();
+                    Console.WriteLine($"Mobile searches for {username}");
+                    await MobileSearches(playwright, username, password, settings.Headless);//.Wait();
+                    Console.WriteLine($"Desktop searches for {username}");
+                    await DesktopSearches(playwright, username, password, settings.Headless);//.Wait();
                 }
                 //);
 
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
+                Console.WriteLine($"Finished at: {DateTime.Now.ToString()}");
+
+                //Console.WriteLine("Press any key to exit...");
+                //Console.ReadKey();
             }
         }
 
@@ -57,7 +62,7 @@ namespace AutoBingRewards
 
             var random = new Random();
             //Parallel.For(0, 30, (_, __) =>
-            for(int i = 0; i < 60; i++)
+            for(int i = 0; i < 50; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
                 //searchPage.Page.CloseAsync();
@@ -67,7 +72,8 @@ namespace AutoBingRewards
             //{
             //    context.Pages[i].CloseAsync().Wait();
             //}
-            context.CloseAsync().Wait();
+            //System.Threading.Thread.Sleep(10000);
+            //context.CloseAsync().Wait();
         }
 
         private static async Task MobileSearches(IPlaywright playwright, string username, string password, bool headless)
@@ -88,13 +94,14 @@ namespace AutoBingRewards
 
             var random = new Random();
             //Parallel.For(0, 20, (_, __) =>
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 50; i++)
             {
                 var searchPage = SearchPageModel.NavigateToAsync(context, random.Next().ToString()).Result;
                 //searchPage.Page.CloseAsync();
             }
             //);
-            context.CloseAsync().Wait();
+            //System.Threading.Thread.Sleep(10000);
+            //context.CloseAsync().Wait();
         }
 
         private static void DailyRewardSet()
